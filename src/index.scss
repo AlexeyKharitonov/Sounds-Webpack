@@ -1,0 +1,85 @@
+@font-face {
+  font-family: "Roboto";
+  src: url("./fonts/Roboto-Regular.ttf"), format("truetype");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: content-box;
+  margin: 0 auto;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  max-width: 700px;
+  margin: 1rem auto;
+}
+
+h1 {
+  text-align: center;
+  color: #ed7235;
+  margin-bottom: 12px;
+  font-size: 50px;
+}
+
+.btns {
+  display: flex;
+  margin-bottom: 12px;
+  justify-content: center;
+}
+
+button {
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+  background-size: cover;
+  border-radius: 20px;
+  margin: 15px;
+  border: 1px solid white;
+  outline: none;
+}
+
+.sunny {
+  background-image: url("./assets/summer-bg.jpg");
+}
+
+.rainy {
+  background-image: url("./assets/rainy-bg.jpg");
+}
+
+.snow {
+  background-image: url("./assets/winter-bg.jpg");
+}
+
+.icon {
+  width: 100px;
+  height: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.sunnyIcon {
+  background-image: url("./assets/icons/sun.svg");
+}
+
+.rainyIcon {
+  background-image: url("./assets/icons/cloud-rain.svg");
+}
+
+.snowIcon {
+  background-image: url("./assets/icons/cloud-snow.svg");
+}
+
+form {
+  text-align: center;
+}
+
+input {
+  cursor: pointer;
+}
