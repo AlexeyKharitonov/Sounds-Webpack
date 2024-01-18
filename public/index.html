@@ -9,18 +9,25 @@
   <body>
     <h1>Weather sounds</h1>
     <div class="btns">
-      <button class="sunny">
+      <button id="sunny">
         <div class="icon sunnyIcon"></div>
       </button>
-      <button class="rainy">
+      <button id="rainy">
         <div class="icon rainyIcon"></div>
       </button>
-      <button class="snow">
+      <button id="snow">
         <div class="icon snowIcon"></div>
       </button>
     </div>
     <form>
-      <input type="range" min="0" max="100" />
+      <input
+        id="volumeControl"
+        type="range"
+        min="0"
+        max="1"
+        step="0.1"
+        value="1"
+      />
     </form>
   </body>
 </html>

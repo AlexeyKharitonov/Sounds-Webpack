@@ -19,13 +19,13 @@ body {
 h1 {
   text-align: center;
   color: #ed7235;
-  margin-bottom: 12px;
-  font-size: 50px;
+  margin-bottom: 10px;
+  font-size: 55px;
 }
 
 .btns {
   display: flex;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   justify-content: center;
 }
 
@@ -40,15 +40,15 @@ button {
   outline: none;
 }
 
-.sunny {
+#sunny {
   background-image: url("./assets/summer-bg.jpg");
 }
 
-.rainy {
+#rainy {
   background-image: url("./assets/rainy-bg.jpg");
 }
 
-.snow {
+#snow {
   background-image: url("./assets/winter-bg.jpg");
 }
 

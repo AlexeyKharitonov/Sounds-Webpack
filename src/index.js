@@ -1,47 +1,81 @@
 import "./index.scss";
+
 import sunnyBGI from "./assets/summer-bg.jpg";
 import rainyBGI from "./assets/rainy-bg.jpg";
 import snowBGI from "./assets/winter-bg.jpg";
 import pause from "./assets/icons/pause.svg";
-
-// const sunnyBtn = document.querySelector(".sunny");
-// const rainyBtn = document.querySelector(".rainy");
-// const snowBtn = document.querySelector(".snow");
-const allBtns = document.querySelector(".btns");
-// const inputRange = document.querySelector("input");
-const sunnyIcon = document.querySelector(".sunnyIcon");
-const rainyIcon = document.querySelector(".rainyIcon");
-const snowIcon = document.querySelector(".snowIcon");
-const allIcons = document.querySelectorAll(".icons");
+import summer from "./assets/sounds/summer.mp3";
+import rain from "./assets/sounds/rain.mp3";
+import winter from "./assets/sounds/winter.mp3";
 
 document.body.style.backgroundImage = `url("${sunnyBGI}")`;
-
-const resetPauseIcon = (iconType) => {
-  switch (iconType) {
-    case "sunny":
-      sunnyIcon.style.backgroundImage = "";
-      break;
-    case "rainy":
-      rainyIcon.style.backgroundImage = "";
-      break;
-    case "snow":
-      snowIcon.style.backgroundImage = "";
-      break;
-  }
+const allBtns = document.querySelector(".btns");
+const volumeInput = document.querySelector("#volumeControl");
+const audios = {
+  sunny: new Audio(summer),
+  rainy: new Audio(rain),
+  snow: new Audio(winter),
+};
+const icons = {
+  sunny: document.querySelector(".sunnyIcon"),
+  rainy: document.querySelector(".rainyIcon"),
+  snow: document.querySelector(".snowIcon"),
+};
+const backgroundImages = {
+  sunny: sunnyBGI,
+  rainy: rainyBGI,
+  snow: snowBGI,
 };
 
-allBtns.addEventListener("click", (event) => {
-  const { target } = event;
+const resetPauseIcon = () => {
+  Object.values(icons).forEach((icon) => (icon.style.backgroundImage = ""));
+};
 
-  if (target.closest(".sunny")) {
-    resetPauseIcon("sunny");
-    document.body.style.backgroundImage = `url("${sunnyBGI}")`;
-    sunnyIcon.style.backgroundImage = `url("${pause}")`;
-  } else if (target.closest(".rainy")) {
-    document.body.style.backgroundImage = `url("${rainyBGI}")`;
-    rainyIcon.style.backgroundImage = `url("${pause}")`;
+const resetAllAudio = () => {
+  Object.values(audios).forEach((mp3) => mp3.pause());
+};
+
+let isPlaying = false;
+
+const updateUI = (type) => {
+  console.log("isPlaying", isPlaying);
+
+  document.body.style.backgroundImage = `url("${backgroundImages[type]}`;
+
+  if (isPlaying) {
+    icons[type].style.backgroundImage = `url("${pause}")`;
+    audios[type].play();
+    isPlaying = true;
   } else {
-    document.body.style.backgroundImage = `url("${snowBGI}")`;
-    snowIcon.style.backgroundImage = `url("${pause}")`;
+    // audios[type].pause();
+    isPlaying = false;
   }
+
+  // isPlaying === true
+  //   ? (icons[type].style.backgroundImage = `url("${pause}")`)
+  //   : "";
+  // isPlaying === true ? audios[type].play() : audios[type].pause();
+};
+
+allBtns.addEventListener("click", ({ target }) => {
+  resetPauseIcon();
+  resetAllAudio();
+  // isPlaying = false;
+
+  if (target.closest("#sunny")) {
+    updateUI("sunny");
+    isPlaying = true;
+  } else if (target.closest("#rainy")) {
+    updateUI("rainy");
+    isPlaying = true;
+  } else {
+    updateUI("snow");
+    isPlaying = true;
+  }
+});
+
+volumeInput.addEventListener("input", ({ target: { value } }) => {
+  Object.keys(audios).forEach((type) => {
+    audios[type].volume = value;
+  });
 });
