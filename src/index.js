@@ -8,9 +8,25 @@ import summer from "./assets/sounds/summer.mp3";
 import rain from "./assets/sounds/rain.mp3";
 import winter from "./assets/sounds/winter.mp3";
 
-document.body.style.backgroundImage = `url("${sunnyBGI}")`;
 const allBtns = document.querySelector(".btns");
 const volumeInput = document.querySelector("#volumeControl");
+
+document.body.style.backgroundImage = `url("${sunnyBGI}")`;
+document.body.style.backgroundSize = "cover";
+document.body.style.backgroundPosition = "center center";
+
+const blurLayer = document.createElement("div");
+blurLayer.style.position = "fixed";
+blurLayer.style.top = "0";
+blurLayer.style.left = "0";
+blurLayer.style.width = "100vw";
+blurLayer.style.height = "100vh";
+blurLayer.style.zIndex = "-1";
+blurLayer.style.backgroundImage = "inherit";
+blurLayer.style.filter = "blur(5px)";
+
+document.body.appendChild(blurLayer);
+
 const audios = {
   sunny: new Audio(summer),
   rainy: new Audio(rain),
@@ -21,11 +37,16 @@ const icons = {
   rainy: document.querySelector(".rainyIcon"),
   snow: document.querySelector(".snowIcon"),
 };
+
 const backgroundImages = {
   sunny: sunnyBGI,
   rainy: rainyBGI,
   snow: snowBGI,
 };
+
+Object.values(audios).forEach((audio) => {
+  audio.loop = true;
+});
 
 const resetPauseIcon = () => {
   Object.values(icons).forEach((icon) => (icon.style.backgroundImage = ""));
@@ -36,41 +57,41 @@ const resetAllAudio = () => {
 };
 
 let isPlaying = false;
+let lastPlayed = null;
 
 const updateUI = (type) => {
-  console.log("isPlaying", isPlaying);
+  document.body.style.backgroundImage = `url("${backgroundImages[type]}")`;
 
-  document.body.style.backgroundImage = `url("${backgroundImages[type]}`;
+  if (lastPlayed === type) {
+    audios[type].pause();
+    isPlaying = false;
+    lastPlayed = null;
+  } else {
+    lastPlayed = type;
+  }
 
   if (isPlaying) {
     icons[type].style.backgroundImage = `url("${pause}")`;
     audios[type].play();
-    isPlaying = true;
   } else {
-    // audios[type].pause();
+    audios[type].pause();
     isPlaying = false;
   }
-
-  // isPlaying === true
-  //   ? (icons[type].style.backgroundImage = `url("${pause}")`)
-  //   : "";
-  // isPlaying === true ? audios[type].play() : audios[type].pause();
 };
 
 allBtns.addEventListener("click", ({ target }) => {
   resetPauseIcon();
   resetAllAudio();
-  // isPlaying = false;
 
   if (target.closest("#sunny")) {
+    isPlaying = true;
     updateUI("sunny");
-    isPlaying = true;
   } else if (target.closest("#rainy")) {
+    isPlaying = true;
     updateUI("rainy");
-    isPlaying = true;
   } else {
-    updateUI("snow");
     isPlaying = true;
+    updateUI("snow");
   }
 });
 
