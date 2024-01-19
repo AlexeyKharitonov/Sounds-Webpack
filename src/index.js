@@ -13,7 +13,7 @@ const volumeInput = document.querySelector("#volumeControl");
 
 document.body.style.backgroundImage = `url("${sunnyBGI}")`;
 document.body.style.backgroundSize = "cover";
-document.body.style.backgroundPosition = "center center";
+document.body.style.backgroundPosition = "center";
 
 const blurLayer = document.createElement("div");
 blurLayer.style.position = "fixed";
@@ -43,10 +43,6 @@ const backgroundImages = {
   rainy: rainyBGI,
   snow: snowBGI,
 };
-
-Object.values(audios).forEach((audio) => {
-  audio.loop = true;
-});
 
 const resetPauseIcon = () => {
   Object.values(icons).forEach((icon) => (icon.style.backgroundImage = ""));
