@@ -1,15 +1,17 @@
 import "./index.scss";
 
-import sunnyBGI from "./assets/summer-bg.jpg";
-import rainyBGI from "./assets/rainy-bg.jpg";
-import snowBGI from "./assets/winter-bg.jpg";
-import pause from "./assets/icons/pause.svg";
-import summer from "./assets/sounds/summer.mp3";
-import rain from "./assets/sounds/rain.mp3";
-import winter from "./assets/sounds/winter.mp3";
+const sunnyBGI = require("./assets/summer-bg.jpg");
+const rainyBGI = require("./assets/rainy-bg.jpg");
+const snowBGI = require("./assets/winter-bg.jpg");
+const pause = require("./assets/icons/pause.svg");
+const summer = require("./assets/sounds/summer.mp3");
+const rain = require("./assets/sounds/rain.mp3");
+const winter = require("./assets/sounds/winter.mp3");
 
-const allBtns = document.querySelector(".btns");
-const volumeInput = document.querySelector("#volumeControl");
+const allBtns = document.querySelector(".btns") as HTMLButtonElement;
+const volumeInput = document.querySelector(
+  "#volumeControl"
+) as HTMLInputElement;
 
 document.body.style.backgroundImage = `url("${sunnyBGI}")`;
 document.body.style.backgroundSize = "cover";
@@ -27,35 +29,49 @@ blurLayer.style.filter = "blur(5px)";
 
 document.body.appendChild(blurLayer);
 
-const audios = {
+interface IAudios {
+  [key: string]: HTMLAudioElement;
+}
+
+interface IIcons {
+  sunny: HTMLDivElement | null;
+  rainy: HTMLDivElement | null;
+  snow: HTMLDivElement | null;
+}
+
+interface IBackgroundImages {
+  [key: string]: string;
+}
+
+const audios: IAudios = {
   sunny: new Audio(summer),
   rainy: new Audio(rain),
   snow: new Audio(winter),
 };
-const icons = {
+const icons: IIcons = {
   sunny: document.querySelector(".sunnyIcon"),
   rainy: document.querySelector(".rainyIcon"),
   snow: document.querySelector(".snowIcon"),
 };
 
-const backgroundImages = {
+const backgroundImages: IBackgroundImages = {
   sunny: sunnyBGI,
   rainy: rainyBGI,
   snow: snowBGI,
 };
 
-const resetPauseIcon = () => {
-  Object.values(icons).forEach((icon) => (icon.style.backgroundImage = ""));
-};
+const resetPauseIcon = () =>
+  Object.values(icons).forEach(
+    (icon: HTMLDivElement) => (icon.style.backgroundImage = "")
+  );
 
-const resetAllAudio = () => {
-  Object.values(audios).forEach((mp3) => mp3.pause());
-};
+const resetAllAudio = () =>
+  Object.values(audios).forEach((mp3: HTMLAudioElement) => mp3.pause());
 
-let isPlaying = false;
-let lastPlayed = null;
+let isPlaying: boolean = false;
+let lastPlayed: null | string = null;
 
-const updateUI = (type) => {
+const updateUI = (type: keyof IIcons) => {
   document.body.style.backgroundImage = `url("${backgroundImages[type]}")`;
 
   if (lastPlayed === type) {
@@ -66,33 +82,45 @@ const updateUI = (type) => {
     lastPlayed = type;
   }
 
-  if (isPlaying) {
-    icons[type].style.backgroundImage = `url("${pause}")`;
-    audios[type].play();
-  } else {
-    audios[type].pause();
-    isPlaying = false;
+  const icon = icons[type];
+
+  if (icon) {
+    if (isPlaying) {
+      icon.style.backgroundImage = `url("${pause}")`;
+      audios[type].play();
+    } else {
+      audios[type].pause();
+      isPlaying = false;
+    }
   }
 };
 
-allBtns.addEventListener("click", ({ target }) => {
-  resetPauseIcon();
-  resetAllAudio();
+allBtns.addEventListener(
+  "click",
+  ({ target }: { target: EventTarget | null }) => {
+    resetPauseIcon();
+    resetAllAudio();
 
-  if (target.closest("#sunny")) {
-    isPlaying = true;
-    updateUI("sunny");
-  } else if (target.closest("#rainy")) {
-    isPlaying = true;
-    updateUI("rainy");
-  } else {
-    isPlaying = true;
-    updateUI("snow");
+    if (target && (target as HTMLElement).closest("#sunny")) {
+      isPlaying = true;
+      updateUI("sunny");
+    } else if (target && (target as HTMLElement).closest("#rainy")) {
+      isPlaying = true;
+      updateUI("rainy");
+    } else {
+      isPlaying = true;
+      updateUI("snow");
+    }
   }
-});
+);
 
-volumeInput.addEventListener("input", ({ target: { value } }) => {
-  Object.keys(audios).forEach((type) => {
-    audios[type].volume = value;
-  });
+volumeInput.addEventListener("input", (event: Event) => {
+  const inputValue = event.target as HTMLInputElement | null;
+
+  if (inputValue) {
+    const targetValue: number = parseFloat(inputValue.value);
+    Object.keys(audios).forEach((type: keyof IAudios) => {
+      audios[type].volume = targetValue;
+    });
+  }
 });
